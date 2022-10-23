@@ -16,9 +16,6 @@
 #define FIELD_WIDTH 11
 #define FIELD_HEIGHT 24
 
-// Enable to increase dolphin level completting lines.
-#define DEEDS_ENABLED
-
 typedef struct Point {
     // Also used for offset data, which is sometimes negative
     int8_t x, y;
@@ -153,12 +150,6 @@ static void tetris_game_render_callback(Canvas* const canvas, void* ctx) {
 
         canvas_set_font(canvas, FontPrimary);
         canvas_draw_str(canvas, 4, 63, "Game Over");
-
-#ifdef DEEDS_ENABLED
-        if(tetris_state->numLines % 8 == 0 && tetris_state->numLines != 0) {
-            DOLPHIN_DEED(DolphinDeedIrSend);
-        }
-#endif
 
         char buffer[13];
         snprintf(buffer, sizeof(buffer), "Lines: %u", tetris_state->numLines);
@@ -394,6 +385,8 @@ int32_t tetris_game_app() {
 
     Piece* newPiece = malloc(sizeof(Piece));
     uint8_t downRepeatCounter = 0;
+
+    DOLPHIN_DEED(DolphinDeedPluginGameStart);
 
     for(bool processing = true; processing;) {
         // This 10U implicitly sets the game loop speed. downRepeatCounter relies on this value
