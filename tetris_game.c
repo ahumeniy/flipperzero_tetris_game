@@ -346,8 +346,6 @@ static void
 }
 
 int32_t tetris_game_app() {
-    srand(DWT->CYCCNT);
-
     FuriMessageQueue* event_queue = furi_message_queue_alloc(8, sizeof(TetrisEvent));
 
     TetrisState* tetris_state = malloc(sizeof(TetrisState));
@@ -362,10 +360,7 @@ int32_t tetris_game_app() {
 
     // Not doing this eventually causes issues with TimerSvc due to not sleeping/yielding enough in this task
     TaskHandle_t timer_task = xTaskGetHandle(configTIMER_SERVICE_TASK_NAME);
-    // TaskHandle_t curr_task = xTaskGetHandle("Tetris Game");
 
-    // uint32_t origTimerPrio = uxTaskPriorityGet(timer_task);
-    // uint32_t myPrio = uxTaskPriorityGet(curr_task);
     vTaskPrioritySet(timer_task, configMAX_PRIORITIES + 1);
 
     ViewPort* view_port = view_port_alloc();
@@ -439,6 +434,8 @@ int32_t tetris_game_app() {
                         break;
                     case InputKeyBack:
                         processing = false;
+                        break;
+                    default:
                         break;
                     }
                 }
