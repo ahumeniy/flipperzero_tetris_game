@@ -359,9 +359,9 @@ int32_t tetris_game_app() {
     FuriMessageQueue* event_queue = furi_message_queue_alloc(8, sizeof(TetrisEvent));
 
     TetrisState* tetris_state = malloc(sizeof(TetrisState));
-    
+
     tetris_state->mutex = furi_mutex_alloc(FuriMutexTypeNormal);
-    
+
     if(!tetris_state->mutex) {
         FURI_LOG_E("TetrisGame", "cannot create mutex\r\n");
         free(tetris_state);
@@ -391,7 +391,7 @@ int32_t tetris_game_app() {
     Piece* newPiece = malloc(sizeof(Piece));
     uint8_t downRepeatCounter = 0;
 
-    DOLPHIN_DEED(DolphinDeedPluginGameStart);
+    dolphin_deed(DolphinDeedPluginGameStart);
 
     for(bool processing = true; processing;) {
         // This 10U implicitly sets the game loop speed. downRepeatCounter relies on this value
